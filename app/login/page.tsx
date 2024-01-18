@@ -1,22 +1,18 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import AddQueAns from "./addQueAns/page";
-import AuthSever from "./authServerManage";
 import { redirect } from "next/navigation";
+import AuthMangeClient from "../authMange";
 
-export default async function Home() {
+export default async function Login() {
   const superbase = createServerComponentClient<Database>({ cookies });
+
   const {
     data: { session },
   } = await superbase.auth.getSession();
 
-  if (!session) {
-    redirect("/login");
+  if (session) {
+    redirect("/");
   }
-  return (
-    <>
-      <AuthSever />
-      <AddQueAns />
-    </>
-  );
+
+  return <AuthMangeClient session={session} />;
 }
